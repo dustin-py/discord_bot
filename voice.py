@@ -38,4 +38,4 @@ async def on_voice_state_update(member, before, after):
             print(f"{member.display_name} has joined voice chat.")
 
 
-bot.run("MTExMDU1NjQyNTI0MDk4NTY1MA.GRhXf7.xcOQxRe9EsQWij8x5ct9-DvijLKXOfTS77rGZE")
+bot.run("")

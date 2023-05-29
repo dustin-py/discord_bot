@@ -24,7 +24,7 @@ async def send_mean_message(message, user, is_private):
 
 
 def run_discord_bot():
-    TOKEN = 'MTExMDU1NjQyNTI0MDk4NTY1MA.GRhXf7.xcOQxRe9EsQWij8x5ct9-DvijLKXOfTS77rGZE'
+    TOKEN = ''
     client = discord.Client(intents=intents)
 
     @client.event

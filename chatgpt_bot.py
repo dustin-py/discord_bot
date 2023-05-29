@@ -9,7 +9,7 @@ openai.api_key = getenv("OPENAPI_TOKEN")
 
 headers = {
         "Content-Type":"application/json",
-        "Authorization":"Bearer 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"
+        "Authorization":"Bearer "
     }
 
 
