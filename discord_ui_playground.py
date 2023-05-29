@@ -1,21 +1,42 @@
 import discord
 from discord.ext import commands
 import requests
+from requests_html import HTML
+from dotenv import load_dotenv
+from os import getenv
 
-TOKEN = 'MTExMDU1NjQyNTI0MDk4NTY1MA.GRhXf7.xcOQxRe9EsQWij8x5ct9-DvijLKXOfTS77rGZE'
+load_dotenv()
 
+TOKEN = getenv('DISCORD_TOKEN')
 
 class SimpleView(discord.ui.View):
      
-    @discord.ui.button(label="Guess What?!",style=discord.ButtonStyle.success)
-    async def hello(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(
+            label="Guess What?!",
+            style=discord.ButtonStyle.success)
+    
+    async def hello(
+        self, 
+        interaction: discord.Interaction, 
+        button: discord.ui.Button):
         await interaction.response.send_message(f"{interaction.user.display_name} sucks fat cock!")
     
-    @discord.ui.button(label="Click to hear a joke.", style=discord.ButtonStyle.blurple)
-    async def joke(self, interaction: discord.Interaction, button: discord.ui.Button):
-        r = requests.get("https://random-ize.com/bad-jokes/bad-jokes-f.php")
-        
-        await interaction.response.send_message(f"Testing joke generator: {r.content}")
+    @discord.ui.button(
+            label="Click to hear a joke.", 
+            style=discord.ButtonStyle.blurple)
+    
+    async def joke(
+        self, 
+        interaction: discord.Interaction, 
+        button: discord.ui.Button):
+        request = requests.get(
+            "https://icanhazdadjoke.com/", 
+            headers={"User-Agent":"https://github.com/dustin-py/discord_bot",
+                     "Content-Type":"text/plain"})
+        response = request.content
+        html_doc = HTML(html=response)
+        joke_text = html_doc.find('p', first=True).text
+        await interaction.response.send_message(joke_text)
          
 
 

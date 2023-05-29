@@ -1,5 +1,5 @@
 import discord
-import responses
+import discord_bot.responses as responses
 import time
 
 

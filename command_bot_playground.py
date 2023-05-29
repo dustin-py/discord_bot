@@ -1,18 +1,28 @@
 import discord
-import asyncio
 import random
+import json
+import asyncio
+import openai
+import requests
+from os import getenv
 from discord.ext import commands
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Declare intents with 
 intents = discord.Intents.default()
 intents.message_content = True # This allows the client/bot to read message content.
 
+
 # Clreate a bot to handle command events:
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
 # Token to log the bot into discord.
-TOKEN = 'MTExMDU1NjQyNTI0MDk4NTY1MA.GRhXf7.xcOQxRe9EsQWij8x5ct9-DvijLKXOfTS77rGZE'
+TOKEN = getenv("DISCORD_TOKEN")
+
+openai.organization = "org-wVPDySoWpfji41ZecNs6aEyZ"
+openai.api_key = getenv("OPENAPI_TOKEN")
 
 
 # LOGING THE BOT INTO DISCORD:
@@ -105,6 +115,48 @@ class Slapper(commands.Converter): # Use a class for conversions
 async def slap(ctx, *,reason: Slapper):
     await ctx.message.delete()
     await ctx.send(reason)
+
+# CHATGPT BOT
+@bot.command(name="chat")
+async def chat_gpt(ctx, *args):
+
+    arguments = ' '.join(args)
+    bearer = f"Bearer {openai.api_key}"
+
+    url = "https://api.openai.com/v1/chat/completions"
+
+    headers = {
+        "Content-Type":"application/json",
+        "Authorization":bearer
+    }
+    
+    payload = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": arguments}],
+        "temperature": 0.7
+    }
+
+    request = requests.post(url,headers=headers,json=payload)
+
+    bot_response = request.json()["choices"][0]["message"]["content"]
+
+    chunk_1 = bot_response[:1998]
+    chunk_2 = bot_response[1999:3996]
+    chunk_3 = bot_response[3996:5994]
+    chunk_4 = bot_response[5994:7992]
+
+    if chunk_1:
+        await ctx.send(chunk_1)
+        await asyncio.sleep(2)
+    if chunk_2:
+        await ctx.send(chunk_2)
+        await asyncio.sleep(2)
+    if chunk_3:
+        await ctx.send(chunk_3)
+        await asyncio.sleep(2)
+    if chunk_4:
+        await ctx.send(chunk_4)
+    
 
 
 
